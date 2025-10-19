@@ -1,5 +1,7 @@
 
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
+
+import { CheckValidation } from '../Utility/Validation'
 
 const Login = () => {
   
@@ -7,10 +9,22 @@ const Login = () => {
   const [emailId, SetEmailid] = useState("")
   const [password, SetPassword] = useState("")
   const [issignin, SetSignin] = useState(true)
+  const [errorMessage, SetErrorMessage] = useState({})
   
  
   const toggleSignin = () =>{
       SetSignin(!issignin)
+  }
+
+  const ValidateEmail = useRef(null)
+  const ValidatePassword= useRef(null)
+
+  const handleClickButton = () =>{
+      const errorMessage = CheckValidation(ValidateEmail.current.value, ValidatePassword.current.value)
+      console.log(ValidateEmail.current.value)
+      console.log(ValidatePassword.current.value)
+      SetErrorMessage(errorMessage)
+      console.log(errorMessage)
   }
 
   return (
@@ -29,35 +43,40 @@ const Login = () => {
       className="input input-md my-2" 
       onChange={(e)=>SetUsername(e.target.value)}
       />
-     
-      
-      </div>)}
+    </div>)}
     
     <div className='mx-3 '>
      <h3 className="card-title">Email:{emailId} </h3>
-      <input 
-      type="email" 
+      <input
+      ref={ValidateEmail}
+      type="email"
       index = {emailId}
-      placeholder="Type here!!!" 
-      className="input input-md my-2" 
+      placeholder="Type here!!!"
+      className="input input-md my-2"
       onChange={(e)=>SetEmailid(e.target.value)}
       />
-      </div>
+      <p className='text-red-600'>{errorMessage.email}</p>
+    </div>
 
     <div className='mx-3 '>
      <h3 className="card-title">Password:{password} </h3>
-      <input 
-      index={password}
-      type="text" 
-      placeholder="Password" 
-      className="input input-md my-2"
-      onChange = {(e)=>SetPassword(e.target.value)} 
-      />
 
+      <input
+      ref={ValidatePassword}
+      index={password}
+      type="text"
+      placeholder="Password"
+      className="input input-md my-2"
+      onChange = {(e)=>SetPassword(e.target.value)}
+      />
+      <p className='text-red-600'>{errorMessage.password}</p>
     </div>
     
     <div className="card-actions justify-center">
-      <button className="btn btn-primary">
+      <button 
+      className="btn btn-primary"
+      onClick={handleClickButton}
+      >
         {issignin ? "SignIn" : "Sign Up"}
         </button>
     </div>
