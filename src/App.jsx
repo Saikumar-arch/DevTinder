@@ -1,4 +1,4 @@
-import {BrowserRouter, Routes, Route } from "react-router-dom"
+import {BrowserRouter, Routes, Route, Link } from "react-router-dom"
 
 import Profile from "./components/Profile.jsx"
 
@@ -19,9 +19,8 @@ function App() {
            <Route path="/Settings" element={<Settings></Settings>}></Route>
            <Route path="/Login" element={<Login/>}></Route>
            </Route>
-           
+          </Routes>
 
-        </Routes>
 
       </BrowserRouter>
 

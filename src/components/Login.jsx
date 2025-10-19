@@ -21,10 +21,9 @@ const Login = () => {
 
   const handleClickButton = () =>{
       const errorMessage = CheckValidation(ValidateEmail.current.value, ValidatePassword.current.value)
-      console.log(ValidateEmail.current.value)
-      console.log(ValidatePassword.current.value)
+      
       SetErrorMessage(errorMessage)
-      console.log(errorMessage)
+      
   }
 
   return (
@@ -55,7 +54,7 @@ const Login = () => {
       className="input input-md my-2"
       onChange={(e)=>SetEmailid(e.target.value)}
       />
-      <p className='text-red-600'>{errorMessage.email}</p>
+      <p className='text-red-700 text-lg'>{errorMessage.email}</p>
     </div>
 
     <div className='mx-3 '>
@@ -69,7 +68,7 @@ const Login = () => {
       className="input input-md my-2"
       onChange = {(e)=>SetPassword(e.target.value)}
       />
-      <p className='text-red-600'>{errorMessage.password}</p>
+      <p className='text-red-700 text-lg'>{errorMessage.password}</p>
     </div>
     
     <div className="card-actions justify-center">
