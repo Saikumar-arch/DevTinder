@@ -2,6 +2,7 @@
 import React, { useRef, useState } from 'react'
 
 import { CheckValidation } from '../Utility/Validation'
+import axios from 'axios'
 
 const Login = () => {
   
@@ -10,6 +11,8 @@ const Login = () => {
   const [password, SetPassword] = useState("")
   const [issignin, SetSignin] = useState(true)
   const [errorMessage, SetErrorMessage] = useState({})
+
+  
   
  
   const toggleSignin = () =>{
@@ -19,10 +22,22 @@ const Login = () => {
   const ValidateEmail = useRef(null)
   const ValidatePassword= useRef(null)
 
-  const handleClickButton = () =>{
+  const handleClickButton = async() =>{
       const errorMessage = CheckValidation(ValidateEmail.current.value, ValidatePassword.current.value)
       
       SetErrorMessage(errorMessage)
+
+     try {
+      const res = await axios.post ("http://localhost:3000/api/login",{
+           emailId,
+           password
+      })
+     } catch(err){
+       console.error(err)
+     }
+     
+
+
       
   }
 
