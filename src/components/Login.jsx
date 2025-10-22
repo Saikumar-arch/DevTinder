@@ -28,17 +28,20 @@ const Login = () => {
       SetErrorMessage(errorMessage)
 
      try {
-      const res = await axios.post(
-      "http://localhost:3000/api/login",
-      { email: emailId, password },
-      {withCredentials:true}
-      
-      );
-
-      }
-      catch(err){
-       console.error(err)
-     }
+  const res = await axios.post(
+    "http://localhost:3000/api/login",
+    {
+      email: emailId,
+      password: password
+    },
+    {
+      withCredentials: true
+    }
+  );
+  console.log("Login successful:", res.data);
+} catch (err) {
+  console.error("Login failed:", err);
+}
      
 
 
