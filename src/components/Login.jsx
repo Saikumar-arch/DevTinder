@@ -7,8 +7,8 @@ import axios from 'axios'
 const Login = () => {
   
   const [username, SetUsername] = useState("")
-  const [emailId, SetEmailid] = useState("")
-  const [password, SetPassword] = useState("")
+  const [emailId, SetEmailid] = useState("test@example.com")
+  const [password, SetPassword] = useState("Password@123")
   const [issignin, SetSignin] = useState(true)
   const [errorMessage, SetErrorMessage] = useState({})
 
@@ -28,11 +28,15 @@ const Login = () => {
       SetErrorMessage(errorMessage)
 
      try {
-      const res = await axios.post ("http://localhost:3000/api/login",{
-           emailId,
-           password
-      })
-     } catch(err){
+      const res = await axios.post(
+      "http://localhost:3000/api/login",
+      { email: emailId, password },
+      {withCredentials:true}
+      
+      );
+
+      }
+      catch(err){
        console.error(err)
      }
      
