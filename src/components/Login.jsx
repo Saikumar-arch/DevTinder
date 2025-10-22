@@ -42,11 +42,7 @@ const Login = () => {
 } catch (err) {
   console.error("Login failed:", err);
 }
-     
-
-
-      
-  }
+     }
 
   return (
     <div className="flex justify-center my-10">
