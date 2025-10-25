@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react'
 
 import { CheckValidation } from '../Utility/Validation'
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
 
 const Login = () => {
   
@@ -11,6 +12,7 @@ const Login = () => {
   const [password, SetPassword] = useState("Password@123")
   const [issignin, SetSignin] = useState(true)
   const [errorMessage, SetErrorMessage] = useState({})
+  const dispatch = useDispatch()
 
   
   
@@ -37,8 +39,11 @@ const Login = () => {
     {
       withCredentials: true
     }
+    
   );
   console.log("Login successful:", res.data);
+  dispatch (res.data)
+
 } catch (err) {
   console.error("Login failed:", err);
 }
