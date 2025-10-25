@@ -4,15 +4,22 @@ import React, { useRef, useState } from 'react'
 import { CheckValidation } from '../Utility/Validation'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
+import { addUser } from '../Utility/userSlice';
+import { useNavigate } from 'react-router';
+import { BASE_URL } from '../Utility/constants';
+
+
 
 const Login = () => {
   
   const [username, SetUsername] = useState("")
-  const [emailId, SetEmailid] = useState("test@example.com")
-  const [password, SetPassword] = useState("Password@123")
+  const [emailId, SetEmailid] = useState("Sai@gmail.com")
+  const [password, SetPassword] = useState("Sai@123")
   const [issignin, SetSignin] = useState(true)
   const [errorMessage, SetErrorMessage] = useState({})
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
 
   
   
@@ -31,21 +38,16 @@ const Login = () => {
 
      try {
   const res = await axios.post(
-    "http://localhost:3000/api/login",
-    {
-      email: emailId,
-      password: password
-    },
-    {
-      withCredentials: true
-    }
-    
+  BASE_URL+'login',
+  { email: emailId, password: password },
+  { withCredentials: true }
   );
-  console.log("Login successful:", res.data);
-  dispatch (res.data)
+  
+  dispatch(addUser(res.data.user));
+  navigate("/Feed")
 
 } catch (err) {
-  console.error("Login failed:", err);
+  console.error("Login failed:", err.data);
 }
      }
 
