@@ -17,6 +17,7 @@ const Login = () => {
   const [password, SetPassword] = useState("Sai@123")
   const [issignin, SetSignin] = useState(true)
   const [errorMessage, SetErrorMessage] = useState({})
+  const [errorMsg, SeterrorMsg] = useState([])
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -48,6 +49,7 @@ const Login = () => {
 
 } catch (err) {
   console.error("Login failed:", err.data);
+  SeterrorMsg("Invalid crediatials")
 }
      }
 
@@ -95,15 +97,20 @@ const Login = () => {
       />
       <p className='text-red-700 text-lg'>{errorMessage.password}</p>
     </div>
-    
+     <p className='m-2 text-red-700 text-lg'>{errorMsg}</p>
     <div className="card-actions justify-center">
+      
+      
+
       <button 
       className="btn btn-primary"
       onClick={handleClickButton}
       >
         {issignin ? "SignIn" : "Sign Up"}
         </button>
+
     </div>
+    
     <p className='m-2 cursor-pointer'
         onClick={toggleSignin}
         >New to Dev tinder? {issignin ? "Sign Up " :"Sign in"}</p>
