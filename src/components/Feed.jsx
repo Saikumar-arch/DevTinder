@@ -10,14 +10,15 @@ const Feed = () => {
   const dispatch = useDispatch();
 
   const getFeed = async () => {
-    if (feed && feed.length > 0) return;
     try {
       const res = await axios.get(`${BASE_URL}/api/feed`, {
         withCredentials: true,
       });
-      dispatch(addFeed(res?.data?.data));
-    } catch (error) {
-      console.log("Feed fetch error:", error);
+
+      // FIX 1: Changed from res.data.data to res.data.feeds
+      dispatch(addFeed(res?.data?.feeds)); // array of users
+    } catch (err) {
+      console.log("Feed fetch error:", err);
     }
   };
 
@@ -25,28 +26,20 @@ const Feed = () => {
     getFeed();
   }, []);
 
+  // FIX 2: Added a loading check before rendering
+  if (!feed || feed.length === 0) {
+    return <h1 className="text-center">Loading...</h1>;
+  }
+
+  // FIX 3: Map over all users to render them
   return (
-    // <div className="p-5">
-    //   <h2 className="text-xl font-semibold mb-4">Feed</h2>
-    //   <div>
-    //     {feed?.length > 0 ? (
-    //       feed.map((item) => (
-    //         <div
-    //           key={item.id}
-    //           className="border p-3 my-2 rounded bg-base-200 shadow-sm"
-    //         >
-    //           <h3 className="font-bold">{item.fullName}</h3>
-    //           <p>{item.profession}</p>
-    //           <small>{item.organisation}</small>
-    //         </div>
-    //       ))
-    //     ) : (
-    //       <p>No feed data available</p>
-    //     )}
-    //   </div>
-    // </div>
-    <div className="flex justify-center">
-      <UserCard></UserCard>
+    <div className="flex flex-col items-center">
+      <div className="my-10 mx-10">
+      {feed.map((user) => (
+        <UserCard 
+        key={user.id} user={user} />
+      ))}
+      </div>
     </div>
   );
 };
