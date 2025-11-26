@@ -6,7 +6,7 @@ import { addFeed } from "../Utility/feedSlice";
 import UserCard from "./userCard";
 
 const Feed = () => {
-  const feed = useSelector((store) => store.feed);
+  const user = useSelector((store) => store.feed);
   const dispatch = useDispatch();
 
   const getFeed = async () => {
@@ -14,6 +14,7 @@ const Feed = () => {
       const res = await axios.get(`${BASE_URL}/api/feed`, {
         withCredentials: true,
       });
+      dispatch()
 
       // FIX 1: Changed from res.data.data to res.data.feeds
       dispatch(addFeed(res?.data?.feeds)); // array of users
@@ -27,7 +28,7 @@ const Feed = () => {
   }, []);
 
   // FIX 2: Added a loading check before rendering
-  if (!feed || feed.length === 0) {
+  if (!user || user.length === 0) {
     return <h1 className="text-center">Loading...</h1>;
   }
 
@@ -35,7 +36,7 @@ const Feed = () => {
   return (
     <div className="flex flex-col items-center">
       <div className="my-10 mx-10">
-      {feed.map((user) => (
+      {user.map((user) => (
         <UserCard 
         key={user.id} user={user} />
       ))}

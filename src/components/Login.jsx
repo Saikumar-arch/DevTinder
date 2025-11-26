@@ -53,11 +53,12 @@ const Login = () => {
           {!isSignin && (
             <div className="mx-3">
               <h3 className="card-title">Username</h3>
-              <input
+              <input 
+    
                 type="text"
                 value={username}
                 placeholder="Username"
-                className="input input-md my-2 w-full text-black"
+                className="input input-md my-2 w-full text-white"
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
@@ -70,7 +71,7 @@ const Login = () => {
               type="email"
               value={emailId}
               placeholder="Enter email"
-              className="input input-md my-2 w-full text-black"
+              className="input input-md my-2 w-full text-white"
               onChange={(e) => setEmailId(e.target.value)}
             />
             <p className="text-red-400 text-sm">{errorMessage.email}</p>
@@ -83,7 +84,7 @@ const Login = () => {
               type="password"
               value={password}
               placeholder="Password"
-              className="input input-md my-2 w-full text-black"
+              className="input input-md my-2 w-full text-white"
               onChange={(e) => setPassword(e.target.value)}
             />
             <p className="text-red-400 text-sm">{errorMessage.password}</p>

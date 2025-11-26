@@ -1,4 +1,4 @@
-import { Await, Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import Navbar from './Navbar.jsx'
 import Footer from './Footer.jsx'
 import axios from 'axios'
@@ -13,24 +13,35 @@ const Body = () => {
   const navigate  = useNavigate()
   const userData  = useSelector((store) => store.user)
 
-  const fetchData = async() =>{
-    try{
-      const res = await axios.get(BASE_URL+"/api/profile",{
-        withCredentials : true
-      })
-      dispatch(addUser(res.data))
+  const fetchData = async() => {
+    try {
+      const res = await axios.get(BASE_URL + "/api/profile", {
+        withCredentials: true
+      });
+
+      console.log("Profile Data:", res.data.user); // Check console to see the structure
+
+      // 🛑 THE FIX IS HERE: 
+      // Your backend sends { message: "...", user: { ... } }
+      // So you must access res.data.user
+      if (res.data.user) {
+        dispatch(addUser(res.data.user));
+      }
+      
+    } catch (err) {
+      console.error("Profile fetch error:", err);
+      if (err.response && (err.response.status === 401 || err.response.status === 404)) {
+        navigate("/login"); 
+      }
     }
-    catch (err) {
-  if (err.response && err.response.status === 404) {
-    navigate("/login"); //redirect to login page
-  } else {
-    console.error(err);
   }
-  }
-  }
-  useEffect(()=>{
-    if(!userData){fetchData()}
-    },[])
+
+  useEffect(() => {
+    // Only fetch if we don't already have user data
+    if (!userData) {
+      fetchData();
+    }
+  }, []); // Empty dependency array ensures this runs once on mount
 
   return (
     <div>
