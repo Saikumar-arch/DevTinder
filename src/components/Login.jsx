@@ -1,123 +1,115 @@
-
-import React, { useRef, useState } from 'react'
-
-import { CheckValidation } from '../Utility/Validation'
-import axios from 'axios'
-import { useDispatch } from 'react-redux'
-import { addUser } from '../Utility/userSlice';
-import { useNavigate } from 'react-router';
-import { BASE_URL } from '../Utility/constants';
-
-
+import React, { useRef, useState } from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "../Utility/userSlice";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../Utility/constants";
+import { CheckValidation } from "../Utility/Validation";
 
 const Login = () => {
-  
-  const [username, SetUsername] = useState("")
-  const [emailId, SetEmailid] = useState("Sai@gmail.com")
-  const [password, SetPassword] = useState("Sai@123")
-  const [issignin, SetSignin] = useState(true)
-  const [errorMessage, SetErrorMessage] = useState({})
-  const [errorMsg, SeterrorMsg] = useState([])
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const [username, setUsername] = useState("");
+  const [emailId, setEmailId] = useState("Sai@gmail.com");
+  const [password, setPassword] = useState("Sai@123");
+  const [isSignin, setIsSignin] = useState(true);
+  const [errorMessage, setErrorMessage] = useState({});
+  const [errorMsg, setErrorMsg] = useState("");
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  
-  
- 
-  const toggleSignin = () =>{
-      SetSignin(!issignin)
-  }
+  const validateEmail = useRef(null);
+  const validatePassword = useRef(null);
 
-  const ValidateEmail = useRef(null)
-  const ValidatePassword= useRef(null)
+  const toggleSignin = () => {
+    setIsSignin(!isSignin);
+  };
 
-  const handleClickButton = async() =>{
-      const errorMessage = CheckValidation(ValidateEmail.current.value, ValidatePassword.current.value)
-      
-      SetErrorMessage(errorMessage)
+  const handleClickButton = async () => {
+    const errors = CheckValidation(
+      validateEmail.current.value,
+      validatePassword.current.value
+    );
+    setErrorMessage(errors);
 
-     try {
-  const res = await axios.post(
-  BASE_URL+'login',
-  { email: emailId, password: password },
+    try {
+
+      const res = await axios.post(`${BASE_URL}/api/login`,
+  { email: emailId, password },
   { withCredentials: true }
-  );
-  
-  dispatch(addUser(res.data.user));
-  navigate("/Feed")
+      );
 
-} catch (err) {
-  console.error("Login failed:", err.data);
-  SeterrorMsg("Invalid crediatials")
-}
-     }
+      dispatch(addUser(res.data.user));
+      navigate("/Feed");
+    } catch (err) {
+      console.error("Login/Register failed:", err.response?.data || err);
+      setErrorMsg("Invalid credentials or server error");
+    }
+  };
 
   return (
     <div className="flex justify-center my-10">
-       <div className="card bg-slate-600 w-96 shadow-sm">
-  <div className="card-body">
-
-    {!issignin && (
-      <div className='mx-3 '>
-      <h3 className="card-title">Username : {username}</h3>
-     
-       <input 
-      type="text" 
-      index = {username}
-      placeholder="Username" 
-      className="input input-md my-2" 
-      onChange={(e)=>SetUsername(e.target.value)}
-      />
-    </div>)}
+      <div className="card bg-slate-600 w-96 shadow-sm">
+        <div className="card-body text-white">
+          {!isSignin && (
+            <div className="mx-3">
+              <h3 className="card-title">Username</h3>
+              <input 
     
-    <div className='mx-3 '>
-     <h3 className="card-title">Email:{emailId} </h3>
-      <input
-      ref={ValidateEmail}
-      type="email"
-      index = {emailId}
-      placeholder="Type here!!!"
-      className="input input-md my-2"
-      onChange={(e)=>SetEmailid(e.target.value)}
-      />
-      <p className='text-red-700 text-lg'>{errorMessage.email}</p>
+                type="text"
+                value={username}
+                placeholder="Username"
+                className="input input-md my-2 w-full text-white"
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+          )}
+
+          <div className="mx-3">
+            <h3 className="card-title">Email</h3>
+            <input
+              ref={validateEmail}
+              type="email"
+              value={emailId}
+              placeholder="Enter email"
+              className="input input-md my-2 w-full text-white"
+              onChange={(e) => setEmailId(e.target.value)}
+            />
+            <p className="text-red-400 text-sm">{errorMessage.email}</p>
+          </div>
+
+          <div className="mx-3">
+            <h3 className="card-title">Password</h3>
+            <input
+              ref={validatePassword}
+              type="password"
+              value={password}
+              placeholder="Password"
+              className="input input-md my-2 w-full text-white"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <p className="text-red-400 text-sm">{errorMessage.password}</p>
+          </div>
+
+          <p className="m-2 text-red-400 text-sm">{errorMsg}</p>
+
+          <div className="card-actions justify-center">
+            <button className="btn btn-primary" onClick={handleClickButton}>
+              {isSignin ? "Sign In" : "Sign Up"}
+            </button>
+          </div>
+
+          <p
+            className="m-2 cursor-pointer text-blue-200 hover:underline"
+            onClick={toggleSignin}
+          >
+            {isSignin
+              ? "New to Dev-Tinder? Sign Up"
+              : "Already have an account? Sign In"}
+          </p>
+        </div>
+      </div>
     </div>
+  );
+};
 
-    <div className='mx-3 '>
-     <h3 className="card-title">Password:{password} </h3>
-
-      <input
-      ref={ValidatePassword}
-      index={password}
-      type="text"
-      placeholder="Password"
-      className="input input-md my-2"
-      onChange = {(e)=>SetPassword(e.target.value)}
-      />
-      <p className='text-red-700 text-lg'>{errorMessage.password}</p>
-    </div>
-     <p className='m-2 text-red-700 text-lg'>{errorMsg}</p>
-    <div className="card-actions justify-center">
-      
-      
-
-      <button 
-      className="btn btn-primary"
-      onClick={handleClickButton}
-      >
-        {issignin ? "SignIn" : "Sign Up"}
-        </button>
-
-    </div>
-    
-    <p className='m-2 cursor-pointer'
-        onClick={toggleSignin}
-        >New to Dev tinder? {issignin ? "Sign Up " :"Sign in"}</p>
-  </div>
-</div>
-    </div>
-  )
-}
-
-export default Login
+export default Login;

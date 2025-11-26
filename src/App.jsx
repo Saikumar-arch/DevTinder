@@ -7,11 +7,14 @@ import { Provider } from "react-redux";
 import appStore from "./Utility/appStore.jsx";
 import Feed from "./components/Feed.jsx";
 import PrivateRoute from "./Utility/PrivateRoute.jsx";
+import { Toaster } from "react-hot-toast";
+import Connections from "./components/Connections.jsx";
 
 function App() {
   return (
     <Provider store={appStore}>
       <BrowserRouter>
+      <Toaster position="top-right" reverseOrder={false} />
         <Routes>
           <Route path="/" element={<Body />}>
             <Route path="/feed" element={<Feed />} />
@@ -30,7 +33,9 @@ function App() {
                   <Settings />
                 </PrivateRoute>
               }
+
             />
+            <Route path="/Connection" element={<Connections></Connections>} />
             <Route path="/Login" element={<Login />} />
           </Route>
         </Routes>
