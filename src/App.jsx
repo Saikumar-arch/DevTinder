@@ -9,6 +9,7 @@ import Feed from "./components/Feed.jsx";
 import PrivateRoute from "./Utility/PrivateRoute.jsx";
 import { Toaster } from "react-hot-toast";
 import Connections from "./components/Connections.jsx";
+import Requests from "./components/Requests.jsx";
 
 function App() {
   return (
@@ -35,7 +36,8 @@ function App() {
               }
 
             />
-            <Route path="/Connection" element={<Connections></Connections>} />
+            <Route path="/Connection" element={<Connections/>} />
+            <Route path="/Requests" element={<Requests/>} />
             <Route path="/Login" element={<Login />} />
           </Route>
         </Routes>

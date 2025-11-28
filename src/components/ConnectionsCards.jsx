@@ -42,15 +42,12 @@ const ConnectionsCards = ({ user }) => {
             <span className="text-gray-500 text-xs">{organisation}</span>
           </div>
 
-          {/* About (Bio) */}
+          
           <p title={about} className="text-xs text-gray-600 line-clamp-3">
             {about || "No bio available for this user."}
           </p>
 
         </div>
-
-        {/* BOTTOM SECTION: Button */}
-        {/* mt-auto ensures this pushes to the very bottom of the card */}
         <div className="mt-auto border-t border-gray-100 bg-gray-50 p-4">
           <a
             href="javascript:void(0)"
