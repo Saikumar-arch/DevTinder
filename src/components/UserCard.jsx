@@ -9,7 +9,7 @@ const UserCard = ({ user }) => {
   if (!user) return <h2>Loading...</h2>;  
 
   const {
-    id, // 1. Get ID directly from user object
+    id,
     fullName,
     age,
     gender,
@@ -22,8 +22,6 @@ const UserCard = ({ user }) => {
   
   const handleAcceptIgnore = async(status, id) =>{
     try {
-      // 2. FIX URL: Use Template Literals `${}`
-      // 3. FIX STATUS: backend expects "interested" or "ignored"
       await axios.post(
         `${BASE_URL}/api/request/send/${status}/${id}`,
         {},
@@ -37,16 +35,15 @@ const UserCard = ({ user }) => {
   }
 
   return (
-    <div className="flex-center card bg-sky-900 w-96 shadow-sm">
-      <figure className="px-10 pt-10">
-        <img src={profileImage} alt={fullName} className="rounded-xl" />
+    <div className="w-96 min-h-80 flex-center card bg-indigo-500 border-pink-700 shadow-lg m-8 rounded-2xl">
+      <figure className="px-6 pt-6 m-2 w-68 h-68">
+        <img src={profileImage} alt={fullName} className="rounded-2xl" />
       </figure>
       
       <div className="card-body items-center text-center">
         <h2 className="card-title text-white">
           {[fullName, age, gender].filter(Boolean).join(", ")}
         </h2>
-        {/* 5. Join skills array if it exists */}
         <h2 className="card-title text-sm text-gray-300">
             {skills ? skills.join(", ") : ""}
         </h2>
@@ -55,16 +52,15 @@ const UserCard = ({ user }) => {
         <p className="text-gray-400">I am a {profession} at {organisation}</p>
 
         <div className="card-actions mt-4">
-          {/* 6. FIX: Use onClick and correct spelling */}
           <button 
-            className="btn btn-primary" 
+            className="btn bg-blue-700 border-pink-700 hover:scale-110 gap-4 shadow-3xl" 
             onClick={() => handleAcceptIgnore("interested", id)} 
           >
             Interested
           </button>
           
           <button 
-            className="btn btn-secondary" 
+            className="btn bg-pink-700 border-blue-900 hover:scale-110 gap-4" 
             onClick={() => handleAcceptIgnore("ignored", id)}
           >
             Ignore
