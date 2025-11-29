@@ -14,10 +14,10 @@ const Feed = () => {
       const res = await axios.get(`${BASE_URL}/api/feed`, {
         withCredentials: true,
       });
-      dispatch()
+      if (res.data && res.data.data) {
+          dispatch(addFeed(res.data.data));
+      }
 
-      // FIX 1: Changed from res.data.data to res.data.feeds
-      dispatch(addFeed(res?.data?.feeds)); // array of users
     } catch (err) {
       console.log("Feed fetch error:", err);
     }
@@ -26,13 +26,10 @@ const Feed = () => {
   useEffect(() => {
     getFeed();
   }, []);
-
-  // FIX 2: Added a loading check before rendering
   if (!user || user.length === 0) {
     return <h1 className="text-center">Loading...</h1>;
   }
 
-  // FIX 3: Map over all users to render them
   return (
     <div className="flex flex-col items-center">
       <div className="my-10 mx-10">

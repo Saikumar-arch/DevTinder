@@ -1,37 +1,29 @@
 import React, { useState } from 'react';
 import UserCard from './userCard';
-import axios, { Axios } from 'axios';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { BASE_URL } from '../Utility/constants';
 import { addUser } from '../Utility/userSlice';
 import toast from 'react-hot-toast';
 
-
-
 const EditProfile = ({ user }) => {
-  
-  // Safety check
   if (!user) return null;
 
-  // State variables
   const dispatch = useDispatch();
-
-  const [fullName, SetFullName] = useState(" ");
-  const [Photo, SetPhotoURL] = useState(" "); 
-  const [Age, SetAge] = useState(" ");
-  const [Gender, SetGender] = useState("");
-  const [Organization, SetOrganization] = useState(" "); 
-  const [Role, SetRole] = useState(""); 
-  const [Skills, SetSkills] = useState(""); 
-
-  
+  const [fullName, SetFullName] = useState(
+  (user.firstName + " " + user.lastName).trim() || ""
+    );
+  const [Photo, SetPhotoURL] = useState(user.photoUrl || ""); 
+  const [Age, SetAge] = useState(user.age || "");
+  const [Gender, SetGender] = useState(user.gender || "");
+  const [Organization, SetOrganization] = useState(user.about || ""); 
+  const [Role, SetRole] = useState(user.skills ? user.skills[0] : ""); 
+  const [Skills, SetSkills] = useState(
+    user.skills && Array.isArray(user.skills) ? user.skills.join(", ") : ""
+  );
 
   const saveprofile = async () => {
-    console.log("Save button clicked!"); 
-    
-
     try {
-      
       const toastId = toast.loading("Saving profile...");
 
       const payload = {
@@ -41,11 +33,10 @@ const EditProfile = ({ user }) => {
         age: Age,
         gender: Gender,
         about: Organization,
-        skills: Skills
+        skills: Skills.split(",").map(s => s.trim()) 
       };
 
       console.log("Sending Payload:", payload);
-      console.log("try is passing")
 
       const res = await axios.patch(
         BASE_URL + "/api/profile/edit",
@@ -53,15 +44,11 @@ const EditProfile = ({ user }) => {
         { withCredentials: true }
       );
 
-      console.log("Server Response:", res);
       if (res.data && res.data.user) {
-        console.log("if is passing")
-        dispatch(addUser(res?.data?.user));
+        dispatch(addUser(res.data.user));
         toast.success("Profile Updated Successfully!", {
             id: toastId,
         });
-      }else{
-        console.log("else pasiing")
       }
 
     } catch (error) {
@@ -69,7 +56,6 @@ const EditProfile = ({ user }) => {
       toast.error("Error updating profile: " + error.message);
     }
   };
-
 
   return (
     <div className="flex flex-wrap justify-center my-10 gap-10 items-start">
@@ -79,22 +65,22 @@ const EditProfile = ({ user }) => {
 
           <div className="form-control w-full">
             <label className="label"><span className="label-text text-white">Full Name</span></label>
-            <input type="text" value={fullName} onChange={(e) => SetFullName(e.target.value)} className="input input-bordered w-full text-white" />
+            <input type="text" value={fullName} onChange={(e) => SetFullName(e.target.value)} className="input input-bordered w-full text-black" />
           </div>
 
           <div className="form-control w-full">
             <label className="label"><span className="label-text text-white">Profile Picture</span></label>
-            <input type="text" value={Photo} onChange={(e) => SetPhotoURL(e.target.value)} className="input input-bordered w-full text-white" />
+            <input type="text" value={Photo} onChange={(e) => SetPhotoURL(e.target.value)} className="input input-bordered w-full text-black" />
           </div>
 
           <div className="form-control w-full">
             <label className="label"><span className="label-text text-white">Age</span></label>
-            <input type="text" value={Age} onChange={(e) => SetAge(e.target.value)} className="input input-bordered w-full text-white" />
+            <input type="text" value={Age} onChange={(e) => SetAge(e.target.value)} className="input input-bordered w-full text-black" />
           </div>
 
           <div className="form-control w-full">
             <label className="label"><span className="label-text text-white">Gender</span></label>
-            <select value={Gender} onChange={(e) => SetGender(e.target.value)} className="select select-bordered w-full text-white">
+            <select value={Gender} onChange={(e) => SetGender(e.target.value)} className="select select-bordered w-full text-black">
               <option value="">-- Select --</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -103,17 +89,17 @@ const EditProfile = ({ user }) => {
 
           <div className="form-control w-full">
             <label className="label"><span className="label-text text-white">Organization</span></label>
-            <input type="text" value={Organization} onChange={(e) => SetOrganization(e.target.value)} className="input input-bordered w-full text-white" />
+            <input type="text" value={Organization} onChange={(e) => SetOrganization(e.target.value)} className="input input-bordered w-full text-black" />
           </div>
 
           <div className="form-control w-full">
-            <label className="label"><span className="label-text text-white">Skills</span></label>
-            <input type="text" value={Skills} onChange={(e) => SetSkills(e.target.value)} className="input input-bordered w-full text-white" />
+            <label className="label"><span className="label-text text-white">Skills (comma separated)</span></label>
+            <input type="text" value={Skills} onChange={(e) => SetSkills(e.target.value)} className="input input-bordered w-full text-black" />
           </div>
 
           <div className="form-control w-full">
             <label className="label"><span className="label-text text-white">Role</span></label>
-            <input type="text" value={Role} onChange={(e) => SetRole(e.target.value)} className="input input-bordered w-full text-white" />
+            <input type="text" value={Role} onChange={(e) => SetRole(e.target.value)} className="input input-bordered w-full text-black" />
           </div>
 
           <div className="card-actions justify-center mt-6">
@@ -121,16 +107,18 @@ const EditProfile = ({ user }) => {
           </div>
         </div>
       </div>
+
       <div className="mt-5 md:mt-0"> 
         <h2 className="text-center text-xl font-bold mb-4 text-white">Live Preview</h2>
         <UserCard user={{
-            fullName:fullName,
+            firstName: fullName.split(" ")[0],
+            lastName: fullName.split(" ").slice(1).join(" "),
             profileImage: Photo,
             age: Age,
             gender: Gender,
             organisation: Organization,
             profession: Role,
-            skills: Skills
+            skills: Skills.split(",").map(s => s.trim()) 
         }} />
       </div>
 

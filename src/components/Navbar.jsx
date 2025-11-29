@@ -23,7 +23,7 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-300">
       <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-xl">
+        <Link to="/Feed" className="btn btn-ghost text-xl">
           Dev-Tinder
         </Link>
       </div>
@@ -49,7 +49,7 @@ const Navbar = () => {
                 />
               </div>
             </div>
-
+           
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
@@ -61,6 +61,9 @@ const Navbar = () => {
                 <Link to="/Connection">Connection</Link>
               </li>
               <li>
+                <Link to="/Requests">Requests</Link>
+              </li>
+              <li>
                 <Link to="/Settings">Settings</Link>
               </li>
 
@@ -68,7 +71,8 @@ const Navbar = () => {
                 <button onClick={handleLogout}>Logout</button>
               </li>
             </ul>
-          </div>
+            </div>
+          
         )}
       </div>
     </div>
