@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addConnection } from '../Utility/connectionSlice'; 
 import axios from 'axios';
 import { useEffect } from 'react';
-import UserCard from './userCard'; 
+
 import ConnectionsCards from './ConnectionsCards';
 
 const Connections = () => {
